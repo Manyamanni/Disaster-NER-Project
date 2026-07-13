@@ -1,0 +1,22 @@
+[
+  {
+    "tokens": ["Flooding", "has", "cut", "off", "access", "to", "the", "hospital", "on", "5th", "Avenue", "in", "Houston", ",", "at", "least", "12", "people", "trapped", ",", "urgent", "need", "for", "boats", "and", "medical", "supplies", "."],
+    "tags": ["O", "O", "O", "O", "O", "O", "O", "B-INFRASTRUCTURE", "O", "B-LOCATION", "I-LOCATION", "O", "B-LOCATION", "O", "O", "O", "B-CASUALTY", "I-CASUALTY", "I-CASUALTY", "O", "O", "O", "O", "B-RESOURCE", "O", "B-RESOURCE", "I-RESOURCE", "O"]
+  },
+  {
+    "tokens": ["Wildfire", "spreading", "near", "Paradise", "Ridge", ",", "evacuation", "ordered", "for", "residents", "along", "Skyline", "Drive", ",", "shelters", "opened", "at", "the", "community", "center", "."],
+    "tags": ["O", "O", "O", "B-LOCATION", "I-LOCATION", "O", "O", "O", "O", "O", "O", "B-LOCATION", "I-LOCATION", "O", "O", "O", "O", "O", "B-INFRASTRUCTURE", "I-INFRASTRUCTURE", "O"]
+  },
+  {
+    "tokens": ["Earthquake", "damaged", "the", "main", "bridge", "in", "Kathmandu", ",", "over", "40", "injured", ",", "rescue", "teams", "need", "heavy", "equipment", "and", "generators", "."],
+    "tags": ["O", "O", "O", "O", "B-INFRASTRUCTURE", "O", "B-LOCATION", "O", "O", "B-CASUALTY", "I-CASUALTY", "O", "O", "O", "O", "O", "B-RESOURCE", "O", "B-RESOURCE", "O"]
+  },
+  {
+    "tokens": ["Hurricane", "knocked", "out", "power", "across", "Miami", "Beach", ",", "families", "need", "clean", "water", "and", "batteries", "urgently", "."],
+    "tags": ["O", "O", "O", "O", "O", "B-LOCATION", "I-LOCATION", "O", "O", "O", "B-RESOURCE", "I-RESOURCE", "O", "B-RESOURCE", "O", "O"]
+  },
+  {
+    "tokens": ["Landslide", "blocked", "the", "highway", "near", "Munnar", ",", "3", "villages", "cut", "off", ",", "no", "food", "or", "medicine", "reaching", "them", "."],
+    "tags": ["O", "O", "O", "B-INFRASTRUCTURE", "O", "B-LOCATION", "O", "B-CASUALTY", "I-CASUALTY", "O", "O", "O", "O", "B-RESOURCE", "O", "B-RESOURCE", "O", "O", "O"]
+  }
+]
