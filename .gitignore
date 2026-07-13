@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+model_output/
+.ipynb_checkpoints/
