@@ -1,9 +1,16 @@
 """
+fetch_humaid_sample.py
+
 Downloads the HumAID disaster tweet dataset from Hugging Face, filters to
 categories most likely to contain our target entities (location,
-infras\, casualty, resource), and samples a manageable number of
+infrastructure, casualty, resource), and samples a manageable number of
 tweets for manual labeling.
 
+Run this in Colab (it needs internet access to Hugging Face, which the
+local sandbox this project was built in does not have).
+
+Usage:
+    python src/fetch_humaid_sample.py --n_per_category 50 --outfile data/to_label.csv
 """
 
 import argparse
@@ -20,12 +27,16 @@ RELEVANT_CATEGORIES = [
 ]
 
 
-def fetch_humaid_dataframe(split="train"):
+def fetch_humaid_dataframe(split="train", local_path=None):
     """
-    Downloads HumAID directly as a parquet file via HF's datasets-server API,
-    bypassing the `datasets` library's xet-based download path (which has been
-    hitting a broken CDN endpoint as of writing this).
+    Loads HumAID either from a manually downloaded local parquet file
+    (recommended if Hugging Face's API is being flaky) or by downloading
+    directly via HF's datasets-server API.
     """
+    if local_path:
+        print(f"Loading HumAID from local file: {local_path}")
+        return pd.read_parquet(local_path)
+
     api_url = "https://datasets-server.huggingface.co/parquet?dataset=QCRI/HumAID-all"
     resp = requests.get(api_url, timeout=30)
     resp.raise_for_status()
@@ -49,10 +60,13 @@ def main():
                          help="How many tweets to sample per category")
     parser.add_argument("--outfile", default="data/to_label.csv")
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--local_path", default=None,
+                         help="Path to a manually downloaded HumAID parquet file "
+                              "(use this if the automatic download keeps failing)")
     args = parser.parse_args()
 
-    print("Downloading HumAID dataset from Hugging Face...")
-    df = fetch_humaid_dataframe(split="train")
+    print("Loading HumAID dataset...")
+    df = fetch_humaid_dataframe(split="train", local_path=args.local_path)
 
     print(f"Loaded {len(df)} total tweets.")
     print("Category counts:\n", df["class_label"].value_counts())
