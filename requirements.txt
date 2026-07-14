@@ -7,3 +7,4 @@ streamlit==1.38.0
 pandas==2.2.2
 numpy==1.26.4
 accelerate==0.33.0
+pyarrow==17.0.0
