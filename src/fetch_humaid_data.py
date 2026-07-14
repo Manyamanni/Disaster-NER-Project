@@ -1,12 +1,14 @@
 """
-Downloads the HumAID disaster tweet dataset from Hugging Face, filters 
-categories most likely to contain the target entities (location,
-infra, casualty, resource), and samples tweets for manual labeling.
+Downloads the HumAID disaster tweet dataset from Hugging Face, filters to
+categories most likely to contain our target entities (location,
+infras\, casualty, resource), and samples a manageable number of
+tweets for manual labeling.
+
 """
 
 import argparse
+import requests
 import pandas as pd
-from datasets import load_dataset
 
 # Categories most likely to contain LOCATION / INFRASTRUCTURE / CASUALTY / RESOURCE
 RELEVANT_CATEGORIES = [
@@ -18,6 +20,29 @@ RELEVANT_CATEGORIES = [
 ]
 
 
+def fetch_humaid_dataframe(split="train"):
+    """
+    Downloads HumAID directly as a parquet file via HF's datasets-server API,
+    bypassing the `datasets` library's xet-based download path (which has been
+    hitting a broken CDN endpoint as of writing this).
+    """
+    api_url = "https://datasets-server.huggingface.co/parquet?dataset=QCRI/HumAID-all"
+    resp = requests.get(api_url, timeout=30)
+    resp.raise_for_status()
+    parquet_info = resp.json()
+
+    split_entry = next(
+        (f for f in parquet_info["parquet_files"] if f["split"] == split), None
+    )
+    if split_entry is None:
+        raise ValueError(f"No parquet file found for split '{split}'")
+
+    parquet_url = split_entry["url"]
+    print(f"Downloading parquet file directly from: {parquet_url}")
+    df = pd.read_parquet(parquet_url)
+    return df
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--n_per_category", type=int, default=40,
@@ -27,8 +52,7 @@ def main():
     args = parser.parse_args()
 
     print("Downloading HumAID dataset from Hugging Face...")
-    ds = load_dataset("QCRI/HumAID-all", split="train")
-    df = ds.to_pandas()
+    df = fetch_humaid_dataframe(split="train")
 
     print(f"Loaded {len(df)} total tweets.")
     print("Category counts:\n", df["class_label"].value_counts())
